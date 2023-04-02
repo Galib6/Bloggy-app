@@ -64,7 +64,37 @@ const AddABlog = () => {
       }
     }
 
-    console.log("ok de");
+    const postDetails = {
+      postTitle: title,
+      postDes: details,
+      authorName: user?.displayName,
+      createdAt: Date().slice(4, 15),
+      profilePic: user?.photoURL,
+    };
+
+    fetch("http://localhost:3000/api/addablog", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(postDetails),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.message) {
+          e.target.reset();
+          toast.success("Successfully posted!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
   };
 
   return (

@@ -5,11 +5,12 @@ export default async function handler(req, res) {
     const post = req.body;
 
     const db = await connectToDatabase();
+    console.log(post);
 
-    // Insert the new user into the "users" collection
+    // Insert the new post into the "posts" collection
     const result = await db.collection("posts").insertOne(post);
 
-    // Return a success message with the new user's ID
+    // Return a success message with the new post's ID
     return res
       .status(200)
       .json({ message: "Post is created", postId: result.insertedId });

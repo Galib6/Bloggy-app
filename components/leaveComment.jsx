@@ -31,7 +31,7 @@ const LeaveComment = ({ id }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.message === "User created") {
+        if (res.message) {
           e.target.reset();
           toast.success("Success, Comment posted", {
             position: "top-right",
