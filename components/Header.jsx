@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import Wrapper from "./Wrapper";
-
 import Link from "next/link";
-import Menu from "./Menu";
 import MenuMobile from "./MenuMobile";
-
 import { IoMdHeartEmpty } from "react-icons/io";
 import { BsCart } from "react-icons/bs";
 import { BiMenuAltRight } from "react-icons/bi";
 import { VscChromeClose } from "react-icons/vsc";
 import { fetchDataFromApi } from "@/utils/api";
 import { AuthContext } from "@/context/AuthProvider";
+import useRole from "@/CutomHook/useRole";
 
 const Header = () => {
-  const { cart } = useContext(AuthContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [showCatMenu, setShowCatMenu] = useState(false);
   const [show, setShow] = useState("translate-y-0");
@@ -41,7 +38,6 @@ const Header = () => {
   }, [lastScrollY]);
 
   const { user, logOut } = useContext(AuthContext);
-  // console.log(user)
 
   const handleLogOut = () => {
     logOut()
@@ -50,6 +46,7 @@ const Header = () => {
         console.log(err);
       });
   };
+  const [role, isLoading] = useRole(user?.email);
 
   return (
     <header
@@ -64,11 +61,22 @@ const Header = () => {
           {/* <img src="/logo.png" className="" /> */}
         </Link>
 
-        <Menu
-          showCatMenu={showCatMenu}
-          setShowCatMenu={setShowCatMenu}
-          categories={categories}
-        />
+        <ul className="hidden md:flex items-center gap-8 font-medium text-black">
+          <Link href="/">
+            <li>Home</li>
+          </Link>
+          <Link href="/addablog">
+            <li>Add a blog</li>
+          </Link>
+          <Link href="/about">
+            <li>About</li>
+          </Link>
+          {!isLoading && role === "admin" && (
+            <Link href="/dashborad">
+              <li>Dashborad</li>
+            </Link>
+          )}
+        </ul>
 
         {mobileMenu && (
           <MenuMobile
@@ -80,37 +88,6 @@ const Header = () => {
         )}
 
         <div className="flex items-center gap-2 text-black">
-          {/* Icon start */}
-          {user && (
-            <Link href="/cart">
-              <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
-                <BsCart className="text-[15px] md:text-[20px]" />
-                {cart.length > 0 && (
-                  <div className="h-[14px] md:h-[18px] min-w-[14px] md:min-w-[18px] rounded-full bg-red-600 absolute top-1 left-5 md:left-7 text-white text-[10px] md:text-[12px] flex justify-center items-center px-[2px] md:px-[5px]">
-                    {cart.length}
-                  </div>
-                )}
-              </div>
-            </Link>
-          )}
-          {/* Icon end */}
-
-          {/* Icon start */}
-          {user ? (
-            <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
-              <IoMdHeartEmpty className="text-[19px] md:text-[24px]" />
-              <div className="h-[14px] md:h-[18px] min-w-[14px] md:min-w-[18px] rounded-full bg-red-600 absolute top-1 left-5 md:left-7 text-white text-[10px] md:text-[12px] flex justify-center items-center px-[2px] md:px-[5px]">
-                {""}
-              </div>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className=" px-3 py-2 bg-black text-white rounded-full"
-            >
-              <button>Sign in</button>
-            </Link>
-          )}
           {user && (
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="">
@@ -134,6 +111,17 @@ const Header = () => {
                 </li>
               </ul>
             </div>
+          )}
+
+          {user ? (
+            <></>
+          ) : (
+            <Link
+              href="/login"
+              className=" px-3 py-2 bg-black text-white rounded-full"
+            >
+              <button>Sign in</button>
+            </Link>
           )}
 
           {/* Icon end */}

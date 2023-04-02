@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const router = useRouter();
@@ -17,20 +18,20 @@ const Login = () => {
   };
 
   const [error, setError] = useState("");
-  const { login, setLoading, setUser } = useContext(AuthContext);
+  const { signIn, setLoading, setUser } = useContext(AuthContext);
 
   const from = router.query.from || "/";
 
   const handleSignIn = (event) => {
     event.preventDefault();
     const { email, password } = userInfo;
-    login(email, password)
+    signIn(email, password)
       .then((res) => {
         const user = res.user;
         // console.log(user);
         setUser(user);
         setError("");
-        form.reset();
+        event.target.reset();
         setLoading(false);
         router.push(from);
         toast.success("Seccessfully Logged in");

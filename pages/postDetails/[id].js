@@ -1,9 +1,9 @@
 import Reviews from "@/components/Reviews";
 import Wrapper from "@/components/Wrapper";
 import LeaveComment from "@/components/leaveComment";
-import React from "react";
+import React, { useState } from "react";
 
-const postDetails = ({ data }) => {
+const postDetails = ({ data, comments }) => {
   const { postTitle, createdAt, postDes, authorName, _id } = data;
   return (
     <Wrapper>
@@ -38,7 +38,7 @@ const postDetails = ({ data }) => {
         </div>
       </div>
       <div>
-        <Reviews></Reviews>
+        {comments.length > 0 && <Reviews comments={comments}></Reviews>}
       </div>
       <div>
         <LeaveComment id={_id}></LeaveComment>
@@ -55,7 +55,12 @@ export async function getServerSideProps(context) {
   const res = await fetch(`http://localhost:3000/api/postdetails/${params.id}`);
   const data = await res.json();
 
+  const res2 = await fetch(
+    `http://localhost:3000/api/postcomments/${params.id}`
+  );
+  const comments = await res2.json();
+
   return {
-    props: { data },
+    props: { data, comments },
   };
 }

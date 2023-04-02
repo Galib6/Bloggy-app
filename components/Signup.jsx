@@ -1,17 +1,15 @@
 import { AuthContext } from "@/context/AuthProvider";
 import { GoogleAuthProvider } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 const Signup = () => {
-  const {
-    setUser,
-    setLoading,
-    createUser,
-    updateUserProfile,
-    signInwithGoolge,
-  } = useContext(AuthContext);
+  const router = useRouter();
+  const { setUser, setLoading, createUser, updateUser, signInwithGoolge } =
+    useContext(AuthContext);
   const provider = new GoogleAuthProvider();
   const [error, setError] = useState("");
 
@@ -51,7 +49,7 @@ const Signup = () => {
       displayName: name,
       photoURL: photoURL,
     };
-    updateUserProfile(profile)
+    updateUser(profile)
       .then(() => {})
       .catch((error) => console.log(error));
   };
@@ -59,13 +57,34 @@ const Signup = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const { email, password, name, photoURL } = userInfo;
+    const userDetails = { ...userInfo, role: "reader" };
+    console.log(userDetails);
     createUser(email, password)
       .then((res) => {
-        const user = res.user;
-        console.log(user);
         setError("");
-        form.reset();
+        event.target.reset();
         handleUpdateUser(name, photoURL);
+        fetch("http://localhost:3000/api/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(userDetails),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            router.push("/");
+            toast.success("Successfully logged in", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -196,6 +215,7 @@ const Signup = () => {
                   </div>
                 </div>
                 <div>
+                  <p className="text-red-500">{error}</p>
                   <button
                     type="submit"
                     className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
