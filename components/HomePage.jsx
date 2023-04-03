@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import Wrapper from "./Wrapper";
 import PostCard from "./PostCard";
 import { API_URL } from "@/utils/urls";
+import SearchComponent from "./SearchComponent";
 
 const HomePage = ({ posts }) => {
   return (
     <main>
       <Wrapper>
+        <SearchComponent></SearchComponent>
         <div className="grid grid-cols-1 gap-12 my-20">
           {posts.map((post, index) => (
             <PostCard key={index} post={post} />

@@ -65,17 +65,19 @@ const Header = () => {
           <Link href="/">
             <li>Home</li>
           </Link>
-          <Link href="/addablog">
-            <li>Add a blog</li>
-          </Link>
+          {!isLoading && role === "author" && (
+            <Link href="/addablog">
+              <li>Add a blog</li>
+            </Link>
+          )}
+          {!isLoading && role === "admin" && (
+            <Link href="/addablog">
+              <li>Add a blog</li>
+            </Link>
+          )}
           <Link href="/about">
             <li>About</li>
           </Link>
-          {!isLoading && role === "admin" && (
-            <Link href="/dashborad">
-              <li>Dashborad</li>
-            </Link>
-          )}
         </ul>
 
         {mobileMenu && (
@@ -118,7 +120,7 @@ const Header = () => {
           ) : (
             <Link
               href="/login"
-              className=" px-3 py-2 bg-black text-white rounded-full"
+              className=" px-3 py-2 bg-[#570DF8] text-white rounded-full"
             >
               <button>Sign in</button>
             </Link>

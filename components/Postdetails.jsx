@@ -1,11 +1,15 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 import Reviews from "./Reviews";
 import LeaveComment from "./leaveComment";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import useRole from "@/CutomHook/useRole";
+import { AuthContext } from "@/context/AuthProvider";
 
 const Postdetails = ({ data, comments }) => {
+  const { user } = useContext(AuthContext);
+  const [role, isLoading] = useRole(user?.email);
   const router = useRouter();
   const {
     postTitle,
@@ -15,6 +19,7 @@ const Postdetails = ({ data, comments }) => {
     _id,
     profilePic,
     coverPic,
+    authorEmail,
   } = data;
   const postDescription = `<div>${postDes}</div>`;
 
@@ -64,20 +69,45 @@ const Postdetails = ({ data, comments }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col justify-center space-y-2 p-4 bg-white border border-indigo-500 mt-4 rounded">
-                <Link
-                  href={`/editBlog/${_id}`}
-                  className="flex justify-center border border-indigo-500 hover:bg-indigo-500 hover:text-white rounded-lg"
-                >
-                  <button>Edit This post</button>
-                </Link>
-                <button
-                  onClick={handleDeletePost}
-                  className="border border-indigo-500 hover:bg-indigo-500 hover:text-white rounded-lg"
-                >
-                  Delete this post
-                </button>
-              </div>
+              {!isLoading && role === "admin" && (
+                <div className="flex flex-col justify-center space-y-2 p-4 bg-white border border-indigo-500 mt-4 rounded">
+                  <Link
+                    href={`/editBlog/${_id}`}
+                    className="flex justify-center border border-indigo-500 hover:bg-indigo-500 hover:text-white rounded-lg"
+                  >
+                    <button>Edit This post</button>
+                  </Link>
+                  <button
+                    onClick={handleDeletePost}
+                    className="border border-indigo-500 hover:bg-indigo-500 hover:text-white rounded-lg"
+                  >
+                    Delete this post
+                  </button>
+                </div>
+              )}
+
+              {!isLoading && role === "author" && (
+                <div>
+                  {user?.email === authorEmail ? (
+                    <div className="flex flex-col justify-center space-y-2 p-4 bg-white border border-indigo-500 mt-4 rounded">
+                      <Link
+                        href={`/editBlog/${_id}`}
+                        className="flex justify-center border border-indigo-500 hover:bg-indigo-500 hover:text-white rounded-lg"
+                      >
+                        <button>Edit This post</button>
+                      </Link>
+                      <button
+                        onClick={handleDeletePost}
+                        className="border border-indigo-500 hover:bg-indigo-500 hover:text-white rounded-lg"
+                      >
+                        Delete this post
+                      </button>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              )}
             </div>
             <div className="w-full px-4 mt-12 prose lg:px-0 lg:w-3/4">
               <div className="mb-5 border-b border-gray-200">

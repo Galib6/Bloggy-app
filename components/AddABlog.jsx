@@ -6,8 +6,8 @@ import { useContext } from "react";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import { Image } from "cloudinary-react";
 import { validateImageFile } from "@/utils/helper";
+import { ImSpinner2 } from "react-icons/im";
 
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
@@ -67,6 +67,24 @@ const AddABlog = () => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    if (!isLoading) {
+      if (role !== "author" && role !== "admin") {
+        router.push("/");
+        toast.error("Unauthorized Access!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
+  }, [role]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -108,6 +126,7 @@ const AddABlog = () => {
       authorName: user?.displayName,
       createdAt: Date().slice(4, 15),
       profilePic: user?.photoURL,
+      authorEmail: user?.email,
     };
 
     console.log(postDetails);
@@ -159,64 +178,76 @@ const AddABlog = () => {
       });
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <div className="flex justify-center items-center">
+          <ImSpinner2 className="animate-spin " size={20} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <form
-        onSubmit={handleSubmit}
-        class="lg:w-1/2 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 mx-auto"
-      >
-        <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">
-          Add a blog
-        </h2>
-        <p class="leading-relaxed mb-5 text-gray-600">
-          Write your blog post here.
-        </p>
-        <div class="relative mb-4">
-          <label for="name" class="leading-7 text-sm text-gray-600">
-            Choose a cover
-          </label>
-          <input
-            type="file"
-            className="file-input file-input-bordered w-full  "
-            onChange={handleImageUpload}
-          />
-          <p className="text-red-500">{errorOfImage}</p>
-          <label for="name" class="leading-7 text-sm text-gray-600">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="name"
-            onChange={() => setErrorOfTitle("")}
-            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-          />
-          <p className="text-red-500">{errorOfTitle}</p>
-        </div>
-        <div class="relative mb-4">
-          <label for="message" class="leading-7 text-sm text-gray-600">
-            Details
-          </label>
-          <div className="h-60">
-            <QuillNoSSRWrapper
-              modules={modules}
-              formats={formats}
-              theme="snow"
-              className="h-44"
-              onChange={(content) => {
-                setDescription(content);
-              }}
-            />
-          </div>
-          <p className="text-red-500">{errorOfDetails}</p>
-        </div>
-        <button
-          type="submit"
-          class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+      {!isLoading && (
+        <form
+          onSubmit={handleSubmit}
+          class="lg:w-1/2 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 mx-auto"
         >
-          Submit
-        </button>
-      </form>
+          <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">
+            Add a blog
+          </h2>
+          <p class="leading-relaxed mb-5 text-gray-600">
+            Write your blog post here.
+          </p>
+          <div class="relative mb-4">
+            <label for="name" class="leading-7 text-sm text-gray-600">
+              Choose a cover
+            </label>
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full  "
+              onChange={handleImageUpload}
+            />
+            <p className="text-red-500">{errorOfImage}</p>
+            <label for="name" class="leading-7 text-sm text-gray-600">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="name"
+              onChange={() => setErrorOfTitle("")}
+              class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+            />
+            <p className="text-red-500">{errorOfTitle}</p>
+          </div>
+          <div class="relative mb-4">
+            <label for="message" class="leading-7 text-sm text-gray-600">
+              Details
+            </label>
+            <div className="h-60">
+              <QuillNoSSRWrapper
+                modules={modules}
+                formats={formats}
+                theme="snow"
+                className="h-44"
+                onChange={(content) => {
+                  setDescription(content);
+                }}
+              />
+            </div>
+            <p className="text-red-500">{errorOfDetails}</p>
+          </div>
+          <button
+            type="submit"
+            class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+          >
+            Submit
+          </button>
+        </form>
+      )}
     </div>
   );
 };
