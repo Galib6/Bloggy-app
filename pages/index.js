@@ -11,7 +11,7 @@ const index = ({ posts }) => {
 };
 
 export async function getServerSideProps(context) {
-  const res = await fetch("https://bloggy-app-weld.vercel.app/api/allPost");
+  const res = await fetch("http://localhost:3000/api/allPost");
   const data = await res.json();
   return {
     props: {

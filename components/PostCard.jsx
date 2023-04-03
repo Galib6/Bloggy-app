@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 const PostCard = ({ post }) => {
+  const postSummery = `<div>${post?.postDes.slice(0, 130)}...</div>`;
   return (
     <div className="flex space-x-8  px-6 py-6 shadow-lg">
       <div>
@@ -17,8 +18,10 @@ const PostCard = ({ post }) => {
             {post?.postTitle}
           </h2>
         </Link>
-        <p className="leading-relaxed mb-2">Catagory: Life Lession</p>
-        <p className="leading-relaxed mb-8">Posted at:{post?.createdAt}</p>
+        <div
+          className="quill-content"
+          dangerouslySetInnerHTML={{ __html: postSummery }}
+        ></div>
         <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-100 mt-auto w-full">
           <Link
             href={`/postDetails/${post._id}`}

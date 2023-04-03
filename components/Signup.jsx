@@ -64,7 +64,7 @@ const Signup = () => {
         setError("");
         event.target.reset();
         handleUpdateUser(name, photoURL);
-        fetch("https://bloggy-app-weld.vercel.app/api/users", {
+        fetch("http://localhost:3000/api/users", {
           method: "POST",
           headers: {
             "content-type": "application/json",

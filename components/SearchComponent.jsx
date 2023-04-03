@@ -10,7 +10,7 @@ const SearchComponent = () => {
 
   useEffect(() => {
     if (query) {
-      fetch(`https://bloggy-app-weld.vercel.app/api/search/${query}`)
+      fetch(`http://localhost:3000/api/search/${query}`)
         .then((res) => res.json())
         .then((res) => {
           setResults(res);
@@ -20,7 +20,7 @@ const SearchComponent = () => {
   }, [query]);
 
   return (
-    <div className="relative mt-20">
+    <div className="relative mt-10">
       <div class="flex justify-center">
         <div class="mb-3 lg:w-[700px]">
           <div class="relative mb-4 flex w-full flex-wrap items-stretch">
@@ -63,9 +63,12 @@ const SearchComponent = () => {
             {results.map((result) => (
               <div key={result._id} className="p-4">
                 <h2 className="text-lg font-medium">{result.postTitle}</h2>
-                <p className="text-sm font-medium">
-                  {result.postDes.slice(10, 60)}
-                </p>
+                <div
+                  className="quill-content"
+                  dangerouslySetInnerHTML={{
+                    __html: result.postDes.slice(0, 100),
+                  }}
+                ></div>
               </div>
             ))}
           </div>
