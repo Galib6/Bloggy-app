@@ -22,7 +22,7 @@ const LeaveComment = ({ id }) => {
     e.preventDefault();
     const scomment = { ...comment, photo: user?.photoURL };
 
-    fetch("http://localhost:3000/api/leavecomment", {
+    fetch("https://bloggy-app-weld.vercel.app/api/leavecomment", {
       method: "POST",
       headers: {
         "content-type": "application/json",

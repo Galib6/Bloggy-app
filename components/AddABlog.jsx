@@ -131,7 +131,7 @@ const AddABlog = () => {
 
     console.log(postDetails);
 
-    fetch("http://localhost:3000/api/addablog", {
+    fetch("https://bloggy-app-weld.vercel.app/api/addablog", {
       method: "POST",
       headers: {
         "content-type": "application/json",

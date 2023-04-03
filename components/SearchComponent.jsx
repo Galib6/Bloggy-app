@@ -10,7 +10,7 @@ const SearchComponent = () => {
 
   useEffect(() => {
     if (query) {
-      fetch(`http://localhost:3000/api/search/${query}`)
+      fetch(`https://bloggy-app-weld.vercel.app/api/search/${query}`)
         .then((res) => res.json())
         .then((res) => {
           setResults(res);
