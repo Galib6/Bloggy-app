@@ -8,9 +8,20 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const client = new MongoClient(uri, options);
+let cachedDb = null;
+let isConnected = false;
 
 export async function connectToDatabase() {
-  client.connect();
-  return client.db("blogAppTaskA");
+  if (isConnected) {
+    return cachedDb;
+  }
+
+  if (!cachedDb) {
+    const client = new MongoClient(uri, options);
+    await client.connect();
+    cachedDb = client.db("blogAppTaskA");
+  }
+
+  isConnected = true;
+  return cachedDb;
 }

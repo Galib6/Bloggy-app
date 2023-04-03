@@ -1,7 +1,8 @@
+import React from "react";
 import useRole from "@/CutomHook/useRole";
 import { AuthContext } from "@/context/AuthProvider";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
@@ -52,20 +53,15 @@ const formats = [
   "link",
 ];
 
-const AddABlog = () => {
+const EditBlog = ({ data }) => {
+  const { postTitle, postDes, _id } = data;
   const [errorOfTitle, setErrorOfTitle] = useState();
   const [errorOfDetails, setErrorsOfDetails] = useState();
-  const [errorOfImage, setErrorsOfimage] = useState();
   const { user } = useContext(AuthContext);
   const [role, isLoading] = useRole(user?.email);
   const router = useRouter();
   const [value, setValue] = useState("");
-  const [imageLink, setImageLink] = useState("");
-  const [description, setDescription] = useState("");
-
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
+  const [description, setDescription] = useState(postDes);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -104,16 +100,10 @@ const AddABlog = () => {
     const postDetails = {
       postTitle: title,
       postDes: description,
-      coverPic: imageLink,
-      authorName: user?.displayName,
-      createdAt: Date().slice(4, 15),
-      profilePic: user?.photoURL,
     };
 
-    console.log(postDetails);
-
-    fetch("http://localhost:3000/api/addablog", {
-      method: "POST",
+    fetch(`http://localhost:3000/api/updatePost/${_id}`, {
+      method: "PUT",
       headers: {
         "content-type": "application/json",
       },
@@ -123,7 +113,7 @@ const AddABlog = () => {
       .then((res) => {
         if (res.message) {
           e.target.reset();
-          toast.success("Successfully posted!", {
+          toast.success("Successfully updates!", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -133,29 +123,8 @@ const AddABlog = () => {
             progress: undefined,
             theme: "light",
           });
+          router.push("/");
         }
-      });
-  };
-  const handleImageUpload = async (e) => {
-    setErrorsOfimage("");
-    const files = e.target.files;
-    const validation = validateImageFile(files);
-    if (!validation.isValid) {
-      setErrorsOfimage(validation.errorMessage);
-      return;
-    }
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "bloggy11");
-    data.append("cloud_name", "dua3l43np");
-
-    fetch("https://api.cloudinary.com/v1_1/dua3l43np/image/upload", {
-      method: "POST",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setImageLink(data.secure_url);
       });
   };
 
@@ -165,26 +134,15 @@ const AddABlog = () => {
         onSubmit={handleSubmit}
         class="lg:w-1/2 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 mx-auto"
       >
-        <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">
-          Add a blog
+        <h2 class="text-gray-900 text-2xl mb-1 font-medium title-font">
+          Edit your blog here
         </h2>
-        <p class="leading-relaxed mb-5 text-gray-600">
-          Write your blog post here.
-        </p>
         <div class="relative mb-4">
-          <label for="name" class="leading-7 text-sm text-gray-600">
-            Choose a cover
-          </label>
-          <input
-            type="file"
-            className="file-input file-input-bordered w-full  "
-            onChange={handleImageUpload}
-          />
-          <p className="text-red-500">{errorOfImage}</p>
           <label for="name" class="leading-7 text-sm text-gray-600">
             Title
           </label>
           <input
+            defaultValue={postTitle}
             type="text"
             id="title"
             name="name"
@@ -199,6 +157,7 @@ const AddABlog = () => {
           </label>
           <div className="h-60">
             <QuillNoSSRWrapper
+              value={description}
               modules={modules}
               formats={formats}
               theme="snow"
@@ -221,4 +180,4 @@ const AddABlog = () => {
   );
 };
 
-export default AddABlog;
+export default EditBlog;
