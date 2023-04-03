@@ -10,7 +10,7 @@ const SearchComponent = () => {
 
   useEffect(() => {
     if (query) {
-      fetch(`http://localhost:3000/api/search/${query}`)
+      fetch(`https://bloggy-app-weld.vercel.app/api/search/${query}`)
         .then((res) => res.json())
         .then((res) => {
           setResults(res);
@@ -58,7 +58,7 @@ const SearchComponent = () => {
       </div>
 
       <div className="flex justify-center mt-[-30px]">
-        {results.length > 0 && (
+        {results.length > 0 && query.length > 0 && (
           <div className="lg:w-[700px] absolute z-10 top-full mt-2 w-full rounded-md shadow-xl  bg-white divide-y divide-gray-200 ">
             {results.map((result) => (
               <div key={result._id} className="p-4">

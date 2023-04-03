@@ -25,7 +25,9 @@ const Postdetails = ({ data, comments }) => {
 
   const handleDeletePost = async () => {
     if (window.confirm("Are you sure to delete?")) {
-      const res = await fetch(`http://localhost:3000/api/deletePost/${_id}`);
+      const res = await fetch(
+        `https://bloggy-app-weld.vercel.app/api/deletePost/${_id}`
+      );
       const data = await res.json();
       if (data.deletedCount >= 1) {
         toast.success("Successfully deleted", {

@@ -19,11 +19,13 @@ export default postDetails;
 export async function getServerSideProps(context) {
   const { params } = context;
 
-  const res = await fetch(`http://localhost:3000/api/postdetails/${params.id}`);
+  const res = await fetch(
+    `https://bloggy-app-weld.vercel.app/api/postdetails/${params.id}`
+  );
   const data = await res.json();
 
   const res2 = await fetch(
-    `http://localhost:3000/api/postcomments/${params.id}`
+    `https://bloggy-app-weld.vercel.app/api/postcomments/${params.id}`
   );
   const comments = await res2.json();
 
