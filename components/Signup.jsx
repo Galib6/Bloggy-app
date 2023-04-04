@@ -1,4 +1,5 @@
 import { AuthContext } from "@/context/AuthProvider";
+import { validateImageFile } from "@/utils/helper";
 import { GoogleAuthProvider } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,6 +8,8 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 
 const Signup = () => {
+  const [imageLink, setImageLink] = useState("");
+  const [errorOfImage, setErrorsOfimage] = useState();
   const router = useRouter();
   const { setUser, setLoading, createUser, updateUser, signInwithGoolge } =
     useContext(AuthContext);
@@ -17,7 +20,6 @@ const Signup = () => {
     email: "",
     name: "",
     password: "",
-    photoURL: "",
   });
 
   const handleChange = ({ target }) => {
@@ -44,10 +46,10 @@ const Signup = () => {
       });
   };
 
-  const handleUpdateUser = (name, photoURL) => {
+  const handleUpdateUser = (name, imageLink) => {
     const profile = {
       displayName: name,
-      photoURL: photoURL,
+      photoURL: imageLink,
     };
     updateUser(profile)
       .then(() => {})
@@ -56,14 +58,13 @@ const Signup = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { email, password, name, photoURL } = userInfo;
+    const { email, password, name } = userInfo;
     const userDetails = { ...userInfo, role: "reader" };
-    console.log(userDetails);
     createUser(email, password)
       .then((res) => {
         setError("");
         event.target.reset();
-        handleUpdateUser(name, photoURL);
+        handleUpdateUser(name, imageLink);
         fetch("https://bloggy-app-weld.vercel.app/api/users", {
           method: "POST",
           headers: {
@@ -92,6 +93,29 @@ const Signup = () => {
       });
   };
 
+  const handleImageUpload = async (e) => {
+    setErrorsOfimage("");
+    const files = e.target.files;
+    const validation = validateImageFile(files);
+    if (!validation.isValid) {
+      setErrorsOfimage(validation.errorMessage);
+      return;
+    }
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "bloggy11");
+    data.append("cloud_name", "dua3l43np");
+
+    fetch("https://api.cloudinary.com/v1_1/dua3l43np/image/upload", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setImageLink(data.secure_url);
+      });
+  };
+
   return (
     <section className="">
       <div className=" items-center px-5 py-12 lg:px-20 shadow-md ">
@@ -105,26 +129,17 @@ const Signup = () => {
             <div className="mt-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label
-                    htmlFor="Name"
-                    className="block text-sm font-medium text-neutral-600"
-                  >
-                    {" "}
-                    Your Photo Url{" "}
+                  <label for="name" class="leading-7 text-sm text-gray-600">
+                    Choose a photo
                   </label>
                   <div className="mt-1">
                     <input
-                      value={userInfo.photoURL}
-                      onChange={handleChange}
-                      id="URL"
-                      name="photoURL"
-                      type="text"
-                      autoComplete="email"
-                      required=""
-                      placeholder="Your Email"
-                      className="block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                      type="file"
+                      className="file-input file-input-bordered w-full  "
+                      onChange={handleImageUpload}
                     />
                   </div>
+                  <p className="text-red-500">{errorOfImage}</p>
                 </div>
                 <div>
                   <label

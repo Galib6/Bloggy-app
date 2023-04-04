@@ -1,38 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Contributors
 
-## Getting Started
+Md. Asadullah al Galib (project lead)
 
-First, run the development server:
+## Documentation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+This project is a Next.js web application that allows users to create, view, and interact with blog posts. It is designed to support different user roles and implement server-side rendering for the HomePage and PostPage. In addition, the application features a rich text editor for creating blog posts, search functionality, and basic CSS styling using Tailwind CSS.
 
-Open [https://bloggy-app-weld.vercel.app](https://bloggy-app-weld.vercel.app) with your browser to see the result.
+## Live Site
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+You can access the live site by navigating to the following link: https://bloggy-app-weld.vercel.app/
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [https://bloggy-app-weld.vercel.app/api/hello](https://bloggy-app-weld.vercel.app/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## User Roles and Login Credentials
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+This application supports three different user roles:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Admin:
+Email: galib@gmail.com
+Password: 51390624
 
-## Learn More
+Author:
+Email: galib1@gmail.com
+Password: 51390624
 
-To learn more about Next.js, take a look at the following resources:
+Reader:
+Email: galib2@gmail.com
+Password: 51390624
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Pages and Components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The application includes three main pages:
 
-## Deploy on Vercel
+1. HomePage: This page displays a paginated list of blog posts with their titles and a short excerpt of their content. Each blog post is clickable and navigates to its individual post page.
+2. PostPage: This page displays the full content of an individual blog post, including its title, content, and associated comments. Users can leave comments on the blog post.
+3. CreatePostPage: This page displays a form allowing users to create a new blog post. The form includes fields for the post's title, content, and an optional image upload. A rich text editor like Quill or Draft.js is used for the content field.
+4. In addition to the main pages, the application also includes several components for common UI elements, such as headers, footers, and navigation menus.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Server-Side Rendering
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The HomePage and PostPage implement server-side rendering (SSR) using Next.js's getServerSideProps function. This allows the application to fetch blog posts and individual post data from the server and render them on the page, improving performance and SEO.
+
+## Search Functionality
+
+The application includes search functionality that allows users to search for blog posts by title or content. This feature is implemented using a search bar and a backend API that performs the search.
+
+## CSS Styling
+
+The application includes basic CSS styling using Tailwind CSS to make it visually appealing and user-friendly.
+
+## Conclusion
+
+This application is a fully-featured blog platform that supports multiple user roles, server-side rendering, search functionality, and client-side form validation. It is built using modern React best practices and is designed to be scalable and easy to maintain.
