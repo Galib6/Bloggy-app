@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const SearchComponent = () => {
@@ -61,15 +62,17 @@ const SearchComponent = () => {
         {results.length > 0 && query.length > 0 && (
           <div className="lg:w-[700px] absolute z-10 top-full mt-2 w-full rounded-md shadow-xl  bg-white divide-y divide-gray-200 ">
             {results.map((result) => (
-              <div key={result._id} className="p-4">
-                <h2 className="text-lg font-medium">{result.postTitle}</h2>
-                <div
-                  className="quill-content"
-                  dangerouslySetInnerHTML={{
-                    __html: result.postDes.slice(0, 100),
-                  }}
-                ></div>
-              </div>
+              <Link key={result._id} href={`/postDetails/${result._id}`}>
+                <div key={result._id} className="p-4">
+                  <h2 className="text-lg font-medium">{result.postTitle}</h2>
+                  <div
+                    className="quill-content"
+                    dangerouslySetInnerHTML={{
+                      __html: result.postDes.slice(0, 100),
+                    }}
+                  ></div>
+                </div>
+              </Link>
             ))}
           </div>
         )}

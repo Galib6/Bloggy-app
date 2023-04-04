@@ -83,7 +83,7 @@ const AddABlog = () => {
         });
       }
     }
-  }, [role]);
+  }, [role, user?.email]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
