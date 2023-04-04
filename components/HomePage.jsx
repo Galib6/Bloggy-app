@@ -6,7 +6,7 @@ import PostCard from "./PostCard";
 import { API_URL } from "@/utils/urls";
 import SearchComponent from "./SearchComponent";
 
-const HomePage = ({ posts }) => {
+const HomePage = ({ posts, comments }) => {
   return (
     <main>
       <Wrapper>
@@ -18,7 +18,7 @@ const HomePage = ({ posts }) => {
         <hr className="mx-5" />
         <div className="grid grid-cols-1 gap-12 mb-20 mt-5">
           {posts.map((post, index) => (
-            <PostCard key={index} post={post} />
+            <PostCard key={index} post={post} comments={comments} />
           ))}
         </div>
       </Wrapper>
