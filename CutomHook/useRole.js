@@ -5,7 +5,7 @@ const useRole = (email) => {
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     if (email) {
-      fetch(`https://bloggy-app-weld.vercel.app/api/users/${email}`)
+      fetch(`http://localhost:3000/api/users/${email}`)
         .then((res) => res.json())
         .then((data) => {
           setRole(data?.role);

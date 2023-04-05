@@ -6,7 +6,7 @@ const PostCard = ({ post }) => {
   const postSummery = `<div>${post?.postDes.slice(0, 130)}...</div>`;
 
   useEffect(() => {
-    fetch(`https://bloggy-app-weld.vercel.app/api/postcomments/${post._id}`)
+    fetch(`http://localhost:3000/api/postcomments/${post._id}`)
       .then((res) => res.json())
       .then((data) => setComments(data));
   }, []);

@@ -102,7 +102,7 @@ const EditBlog = ({ data }) => {
       postDes: description,
     };
 
-    fetch(`https://bloggy-app-weld.vercel.app/api/updatePost/${_id}`, {
+    fetch(`http://localhost:3000/api/updatePost/${_id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
